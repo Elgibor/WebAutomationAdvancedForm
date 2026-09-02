@@ -29,4 +29,13 @@ public class BrowserFactory {
         driver.manage().window().setSize(new Dimension(1920,1080));
         return driver;
     }
+    public WebDriver getDriver() {
+        return driver;
+    }
+
+    public void closeBrowser() {
+        if (driver != null) {
+            driver.quit();
+        }
+    }
 }

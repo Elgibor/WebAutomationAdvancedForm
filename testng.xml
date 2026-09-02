@@ -9,6 +9,7 @@
           name="C:\Users\phind\Ndosi Automation\WebAutomationAdvancedForm">
         <classes>
             <class name="Tests.LoginTests">
+
             </class>
         </classes>
     </test>
