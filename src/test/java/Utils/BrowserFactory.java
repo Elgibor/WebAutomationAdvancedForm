@@ -14,11 +14,11 @@ public class BrowserFactory {
     public static WebDriver launchBrowser(String browserChoice, String url) {
         if (browserChoice.equalsIgnoreCase("ChroMe")) {
             ChromeOptions chromeOptions = new ChromeOptions();
-            chromeOptions.addArguments("--headless=new");
+            chromeOptions.addArguments();
             driver = new ChromeDriver(chromeOptions);
         } else if (browserChoice.equalsIgnoreCase("edge")) {
             EdgeOptions edgeOptions = new EdgeOptions();
-            edgeOptions.addArguments("--headless=new");
+            edgeOptions.addArguments();
             driver = new EdgeDriver(edgeOptions);
             driver.manage().window().setSize(new Dimension(1920, 1080));
         } else {

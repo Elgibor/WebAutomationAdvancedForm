@@ -34,4 +34,16 @@ public class LoginTests extends base{
         landingPage.verifyLoginSuccess();
         takesScreenshots.takesSnapShot(driver,"Landing page");
     }
+
+    @Test(priority = 5)
+    public void clickDropdownButton() throws InterruptedException {
+        landingPage.clickProfileDropdown();
+        takesScreenshots.takesSnapShot(driver,"landing page");
+    }
+
+    @Test(priority = 6)
+    public void clickLearningMaterialsOption() throws InterruptedException {
+        landingPage.clickLearningMaterialsOption();
+        takesScreenshots.takesSnapShot(driver,"landing page");
+    }
 }

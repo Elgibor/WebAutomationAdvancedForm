@@ -15,6 +15,12 @@ public class LandingPage {
     @FindBy(xpath = "//span[normalize-space()='My Learning']")
     WebElement myLearningTab;
 
+    @FindBy(xpath = "//button[.//span[text()='Learn']]")
+    WebElement profileDropdown;
+
+    @FindBy(xpath = "//span[text()='Learning Materials']")
+    WebElement learningMaterialsOption;
+
     public LandingPage(WebDriver driver) {
         this.driver = driver;
     }
@@ -24,7 +30,13 @@ public class LandingPage {
         myLearningTab.isDisplayed();
     }
 
+    public void clickProfileDropdown() {
+        new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.visibilityOf(profileDropdown));
+        profileDropdown.click();
+    }
 
-
-
+    public void clickLearningMaterialsOption() {
+        new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.visibilityOf(learningMaterialsOption));
+        learningMaterialsOption.click();
+    }
 }
