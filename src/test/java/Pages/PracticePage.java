@@ -11,12 +11,20 @@ public class PracticePage {
     @FindBy(xpath = "//span[text()='Web Automation Advance']")
     WebElement webAutomationAdvance;
 
+    @FindBy(id = "deviceType")
+    WebElement deviceTypeDropdown;
+
+
     public PracticePage(WebDriver driver) {
         this.driver = driver;}
 
 
             public void clickWebAutomationAdvance () {
             webAutomationAdvance.click();
+        }
+
+        public void selectDeviceType (String deviceType){
+            deviceTypeDropdown.sendKeys(deviceType);
         }
 }
 

@@ -13,4 +13,11 @@ public class PracticeTest extends base {
         Thread.sleep(2000);
         takesScreenshots.takesSnapShot(driver,"practice page");
     }
+
+    @Test(dependsOnGroups = "login")
+    public void selectDeviceType() throws InterruptedException {
+        practice.selectDeviceType("Phone");
+        Thread.sleep(2000);
+        takesScreenshots.takesSnapShot(driver,"practice page");
+    }
 }
