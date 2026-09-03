@@ -145,7 +145,7 @@ public class PracticePage {
         }
 
         public void clickViewInvoiceButton (String invoiceNumber){
-            WebElement viewInvoiceButton = driver.findElement(By.id("view-invoice-" + invoiceNumber));
+            WebElement viewInvoiceButton = driver.findElement(By.id("view-invoice-INV" + invoiceNumber));
             viewInvoiceButton.click();
         }
 
