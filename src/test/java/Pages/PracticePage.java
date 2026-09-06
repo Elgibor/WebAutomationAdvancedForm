@@ -1,12 +1,9 @@
 package Pages;
 
-import org.apache.xmlbeans.impl.xb.xsdschema.Public;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-
-import java.util.List;
 
 public class PracticePage {
 
@@ -119,7 +116,7 @@ public class PracticePage {
         return unitPriceLabel.getText();
     }
 
-    public boolean isUnitPriceCorrect(String expectedUnitPrice) {
+    public boolean unitPriceR400IsDisplayed(String expectedUnitPrice) {
         String actualPrice = getUnitPriceText();
         return actualPrice.equals(expectedUnitPrice);
     }
