@@ -1,5 +1,6 @@
 package Tests;
 
+import org.apache.poi.ss.formula.functions.T;
 import org.testng.annotations.Test;
 
 
@@ -78,7 +79,12 @@ public class PracticeTest extends base {
     @Test(priority = 9, dependsOnGroups = "login")
     public void selectColor() throws InterruptedException {
         practice.selectColor("Blue");
-        Thread.sleep(2000);
+        Thread.sleep(500);
+
+        //Verify Blue is selected
+        assert practice.isColorSelected("Blue") : "Blue color is not selected!";
+
+        Thread.sleep(1000);
         takesScreenshots.takesSnapShot(driver, "inventory form");
     }
 

@@ -4,6 +4,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.Select;
+
 
 public class PracticePage {
 
@@ -131,6 +133,26 @@ public class PracticePage {
 
     public void selectColor(String color) {
         colorDropdown.sendKeys(color);
+        Select colorSelect = new Select(colorDropdown);
+        colorSelect.selectByVisibleText(color);
+
+        // Verify selection
+        WebElement selectedOption = colorSelect.getFirstSelectedOption();
+        String selectedColor = selectedOption.getText();
+
+        if (!selectedColor.equals(color)) {
+            throw new AssertionError("Failed to select color: " + color + ". Got: " + selectedColor);
+        }
+
+    }
+    public String getSelectedColor() {
+        Select colorSelect = new Select(colorDropdown);
+        WebElement selectedOption = colorSelect.getFirstSelectedOption();
+        return selectedOption.getText();
+    }
+
+    public boolean isColorSelected(String expectedColor) {
+        return getSelectedColor().equals(expectedColor);
     }
 
     public void enterQuantity(String quantity) {
