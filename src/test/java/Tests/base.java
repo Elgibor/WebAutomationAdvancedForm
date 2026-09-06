@@ -13,7 +13,6 @@ import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 
 
-
 public class base {
     protected static WebDriver driver;
     protected static HomePage homePage;
@@ -25,12 +24,11 @@ public class base {
     private static BrowserFactory browserFactory;
 
 
-
     @BeforeSuite
     public void setUp() {
         try {
-            browserFactory  = new BrowserFactory();
-            browserFactory.launchBrowser("chrome", "https://ndosisimplifiedautomation.vercel.app/");
+            browserFactory = new BrowserFactory();
+            BrowserFactory.launchBrowser("chrome", "https://ndosisimplifiedautomation.vercel.app/");
             driver = browserFactory.getDriver();
 
 

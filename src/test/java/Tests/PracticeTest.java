@@ -4,24 +4,24 @@ import Pages.PracticePage;
 import org.testng.annotations.Test;
 
 
-
 public class PracticeTest extends base {
 
     private static final String expectedUnitPrice = "R480.00";
+    private String invoiceNumber;
 
 
     @Test(dependsOnGroups = "login")
     public void clickWebAutomationAdvance() throws InterruptedException {
         practice.clickWebAutomationAdvance();
         Thread.sleep(2000);
-        takesScreenshots.takesSnapShot(driver,"practice page");
+        takesScreenshots.takesSnapShot(driver, "practice page");
     }
 
     @Test(dependsOnGroups = "login")
     public void selectDeviceType() throws InterruptedException {
         practice.selectDeviceType("Phone");
         Thread.sleep(2000);
-        takesScreenshots.takesSnapShot(driver,"practice page");
+        takesScreenshots.takesSnapShot(driver, "practice page");
     }
 
     @Test(priority = 1, dependsOnGroups = "login")
@@ -60,7 +60,7 @@ public class PracticeTest extends base {
     }
 
     @Test(priority = 6, dependsOnGroups = "login")
-    public void enterAddress () throws InterruptedException {
+    public void enterAddress() throws InterruptedException {
         practice.enterAddress("123 Test Street");
         Thread.sleep(2000);
         takesScreenshots.takesSnapShot(driver, "practice page");
@@ -73,7 +73,7 @@ public class PracticeTest extends base {
         takesScreenshots.takesSnapShot(driver, "practice page");
     }
 
-    @Test (priority = 8, dependsOnGroups = "login")
+    @Test(priority = 8, dependsOnGroups = "login")
     public void selectShippingOption() throws InterruptedException {
         practice.selectShippingOption();
         Thread.sleep(2000);
@@ -104,28 +104,32 @@ public class PracticeTest extends base {
     @Test(priority = 12, dependsOnGroups = "login")
     public void clickPurchaseButton() throws InterruptedException {
         practice.clickPurchaseButton();
-        Thread.sleep(2000);
-        takesScreenshots.takesSnapShot(driver, "practice page");
+        Thread.sleep(3000);
+        takesScreenshots.takesSnapShot(driver, "purchase confirmation");
     }
 
-    /*@Test(priority = 13, dependsOnGroups = "login")
-    public void verifyPurchaseSuccess() throws InterruptedException {
-
-    }*/
 
     @Test(priority = 13, dependsOnGroups = "login")
-    public void clickViewHistoryButton() throws InterruptedException {
-        practice.clickViewHistoryButton();
+    public void clickViewInvoiceOnSuccessPage() throws InterruptedException {
+        practice.clickViewInvoiceOnSuccessPage();
         Thread.sleep(2000);
-        takesScreenshots.takesSnapShot(driver, "practice page");
+        // Verify invoice opened
+
+
+        takesScreenshots.takesSnapShot(driver, "invoice history panel");
     }
 
-   /* @Test(priority = 14, dependsOnGroups = "login")
-    public void clickViewInvoiceButton() throws InterruptedException {
-        practice.clickViewInvoiceButton();
-        Thread.sleep(2000);
-        takesScreenshots.takesSnapShot(driver, "practice page");
-    }*/
 
+    @Test(priority = 14, dependsOnGroups = "login")
+    public void clickViewButtonInHistory() throws InterruptedException {
+        // Click the View button in the history panel
+        practice.clickViewButtonInHistory();
+        Thread.sleep(3000);
+
+        // Verify invoice opened with details
+        assert practice.isInvoiceOpened() : "Invoice did not open!";
+
+        takesScreenshots.takesSnapShot(driver, "invoice details opened");
+    }
 
 }
