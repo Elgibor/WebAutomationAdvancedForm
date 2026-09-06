@@ -26,9 +26,10 @@ public class BrowserFactory {
         }
         driver.manage().window().maximize();
         driver.get(url);
-        driver.manage().window().setSize(new Dimension(1920,1080));
+        driver.manage().window().setSize(new Dimension(1920, 1080));
         return driver;
     }
+
     public WebDriver getDriver() {
         return driver;
     }

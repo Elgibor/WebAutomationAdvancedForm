@@ -31,7 +31,7 @@ public class ReadData {
         }
     }
 
-    public ReadData() throws IOException{
+    public ReadData() throws IOException {
 
     }
 
@@ -49,10 +49,6 @@ public class ReadData {
 //       System.out.println("wrong user: " + wrong);
 //       System.out.println("wrong password: " + wrongpass);
 //    }
-
-
-
-
 
 
 }

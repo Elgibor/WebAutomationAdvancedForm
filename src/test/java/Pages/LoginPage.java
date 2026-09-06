@@ -29,16 +29,16 @@ public class LoginPage {
         new WebDriverWait(driver, Duration.ofSeconds(15)).until(ExpectedConditions.visibilityOf(usernameField));
         usernameField.sendKeys(username);
     }
-    public void enterPassword(String password){
+
+    public void enterPassword(String password) {
         passwordField.sendKeys(password);
 
     }
 
-    public void clickLoginSubmitButton(){
+    public void clickLoginSubmitButton() {
         loginSubmitButton.click();
 
     }
-
 
 
 }
