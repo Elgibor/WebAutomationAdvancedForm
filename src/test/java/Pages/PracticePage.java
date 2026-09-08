@@ -170,9 +170,11 @@ public class PracticePage {
         }
     }
 
-    public void enterAddress(String address) {
+    public String enterAddress(String address) {
         addressInput.clear();
         addressInput.sendKeys(address);
+
+        return addressInput.getAttribute("value");
     }
 
     public void clickNextButton() {

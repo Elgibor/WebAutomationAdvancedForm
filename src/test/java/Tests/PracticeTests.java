@@ -1,10 +1,10 @@
 package Tests;
 
-import org.apache.poi.ss.formula.functions.T;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 
-public class PracticeTest extends base {
+public class PracticeTests extends base {
 
     private static final String expectedUnitPrice = "R480.00";
     private static final double expectedSubtotal = 960.00;
@@ -97,7 +97,8 @@ public class PracticeTest extends base {
 
     @Test(priority = 11, dependsOnGroups = "login")
     public void enterAddress() throws InterruptedException {
-        practice.enterAddress("123 Test Street");
+        String address =  practice.enterAddress("123 Test Street");
+        Assert.assertEquals(address, "123 Test Street", "Address does not match the expected value.");
         Thread.sleep(2000);
         takesScreenshots.takesSnapShot(driver, "inventory form");
     }
