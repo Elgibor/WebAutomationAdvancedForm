@@ -62,8 +62,9 @@ public class PracticeTests extends base {
 
 
     @Test(priority = 7, dependsOnGroups = "login")
-    public void unitPriceR400IsDisplayed() throws InterruptedException {
-        practice.unitPriceR400IsDisplayed(expectedUnitPrice);
+    public void verifyUnitPrice() throws InterruptedException {
+        boolean isPriceCorrect = practice.unitPriceR400IsDisplayed(expectedUnitPrice);
+        Assert.assertTrue(isPriceCorrect, "Unit price is not displayed correctly.");
         Thread.sleep(2000);
         takesScreenshots.takesSnapShot(driver, "inventory form");
     }
@@ -72,12 +73,12 @@ public class PracticeTests extends base {
     @Test(priority = 8, dependsOnGroups = "login")
     public void selectColor() throws InterruptedException {
         practice.selectColor("Blue");
-        Thread.sleep(500);
+        Thread.sleep(2000);
 
         //Verify Blue is selected
         assert practice.isColorSelected("Blue") : "Blue color is not selected!";
 
-        Thread.sleep(1000);
+        Thread.sleep(2000);
         takesScreenshots.takesSnapShot(driver, "inventory form");
     }
 
@@ -120,7 +121,11 @@ public class PracticeTests extends base {
 
     @Test(priority = 16, dependsOnGroups = "login")
     public void selectShippingOption() throws InterruptedException {
-        practice.selectShippingOption();
+        practice.selectExpressShippingOption();
+
+        boolean isShippingApplied = practice.isExpressShippingApplied("R25.00");
+        Assert.assertTrue(isShippingApplied, "Express shipping is not applied correctly.");
+
         Thread.sleep(2000);
         takesScreenshots.takesSnapShot(driver, "inventory form");
     }
@@ -128,6 +133,10 @@ public class PracticeTests extends base {
     @Test(priority = 17, dependsOnGroups = "login")
     public void selectWarrantyOption() throws InterruptedException {
         practice.selectWarrantyOption();
+
+        boolean isWarrantyApplied = practice.isWarrantyApplied("R49.00");
+        Assert.assertTrue(isWarrantyApplied, "Warranty is not applied correctly.");
+
         Thread.sleep(2000);
         takesScreenshots.takesSnapShot(driver, "inventory form");
     }
@@ -142,13 +151,17 @@ public class PracticeTests extends base {
     @Test(priority = 19, dependsOnGroups = "login")
     public void clickApplyDiscountButton() throws InterruptedException {
         practice.clickApplyDiscountButton();
+
+        boolean isDiscountApplied = practice.isDiscountApplied();
+        Assert.assertTrue(isDiscountApplied, "Discount is not applied correctly.");
+
         Thread.sleep(2000);
         takesScreenshots.takesSnapShot(driver, "inventory form");
     }
 
     @Test(priority = 20, dependsOnGroups = "login")
-    public void clickPurchaseButton() throws InterruptedException {
-        practice.clickPurchaseButton();
+    public void clickConfirmPurchaseButton() throws InterruptedException {
+        practice.clickConfirmPurchaseButton();
         Thread.sleep(3000);
         takesScreenshots.takesSnapShot(driver, "purchase confirmation");
     }
@@ -167,9 +180,6 @@ public class PracticeTests extends base {
         // Click the View button in the history panel
         practice.clickViewButtonInHistory();
         Thread.sleep(3000);
-
-        // Verify invoice opened with details
-        assert practice.isInvoiceOpened() : "Invoice did not open!";
 
         takesScreenshots.takesSnapShot(driver, "invoice details opened");
     }

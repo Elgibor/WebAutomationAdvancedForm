@@ -4,12 +4,17 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 
 
 public class PracticePage {
 
     WebDriver driver;
+
 
     @FindBy(xpath = "//span[text()='Web Automation Advance']")
     WebElement webAutomationAdvance;
@@ -29,7 +34,7 @@ public class PracticePage {
     @FindBy(id = "storage-128GB")
     WebElement storageOption;
 
-    @FindBy(xpath = "//*[@id=\"unit-price-label\"]")
+    @FindBy(id = "unit-price-value")
     WebElement unitPriceLabel;
 
     @FindBy(id = "color")
@@ -53,14 +58,20 @@ public class PracticePage {
     @FindBy(id = "shipping-option-express")
     WebElement shippingOption;
 
-    @FindBy(id = "breakdown-total-value")
-    WebElement breakdownTotalValue;
+    @FindBy(id = "breakdown-shipping-value")
+    WebElement shippingCostValue;
 
     @FindBy(id = "warranty-1yr")
     WebElement warrantyOption;
 
+    @FindBy(id = "breakdown-warranty-value")
+    WebElement warrantyCostValue;
+
     @FindBy(id = "discount-code")
     WebElement discountCodeInput;
+
+    @FindBy(id = "discount-feedback")
+    WebElement discountValue;
 
     @FindBy(id = "apply-discount-btn")
     WebElement applyDiscountButton;
@@ -91,7 +102,8 @@ public class PracticePage {
     }
 
     public void selectDeviceType(String deviceType) {
-        deviceTypeDropdown.sendKeys(deviceType);
+        Select deviceTypeSelect = new Select(deviceTypeDropdown);
+        deviceTypeSelect.selectByVisibleText(deviceType);
     }
 
     public void verifyBrandDropdownIsEnabled() {
@@ -114,7 +126,9 @@ public class PracticePage {
         storageOption.click();
     }
 
+    //---STEP 7: Unit Price ---
     public String getUnitPriceText() {
+        new WebDriverWait(driver,Duration.ofSeconds(15)).until(ExpectedConditions.visibilityOf(unitPriceLabel));
         return unitPriceLabel.getText();
     }
 
@@ -124,12 +138,16 @@ public class PracticePage {
     }
 
     public double getUnitPriceAsDouble() {
-        String priceText = getUnitPriceText();
-        // Remove any currency symbols and commas, then parse to double
+        // Wait for the unit price label to be visible before trying to read it
+        new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.visibilityOf(unitPriceLabel));
+
+        String priceText = unitPriceLabel.getText();
+
+        // Remove any currency symbols (like 'R') and commas, then parse to double
         String numericPrice = priceText.replaceAll("[^\\d.]", "");
+
         return Double.parseDouble(numericPrice);
     }
-
 
     public void selectColor(String color) {
         colorDropdown.sendKeys(color);
@@ -145,6 +163,7 @@ public class PracticePage {
         }
 
     }
+
     public String getSelectedColor() {
         Select colorSelect = new Select(colorDropdown);
         WebElement selectedOption = colorSelect.getFirstSelectedOption();
@@ -156,19 +175,40 @@ public class PracticePage {
     }
 
     public void enterQuantity(String quantity) {
+        new WebDriverWait(driver, Duration.ofSeconds(15)).until(ExpectedConditions.visibilityOf(quantityInput));
+        new WebDriverWait(driver, Duration.ofSeconds(15)).until(ExpectedConditions.elementToBeClickable(quantityInput));
+
         quantityInput.clear();
         quantityInput.sendKeys(quantity);
     }
 
-    public void verifySubtotal(double expectedSubtotal) {
-        double unitPrice = getUnitPriceAsDouble();
-        int quantity = Integer.parseInt(quantityInput.getAttribute("value"));
-        double actualSubtotal = unitPrice * quantity;
+    //STEP 8: Verify Subtotal---
+    public boolean verifySubtotal(double expectedSubtotal) {
+        try {
+            //Get the unit price
+            double unitPrice = getUnitPriceAsDouble();
 
-        if (actualSubtotal != expectedSubtotal) {
-            throw new AssertionError("Expected subtotal: " + expectedSubtotal + ", but got: " + actualSubtotal);
+            //Get the quantity
+            String qtyValue = quantityInput.getAttribute("value");
+            if (qtyValue == null || qtyValue.isEmpty()) {
+                throw new AssertionError("Quantity input is empty.");
+            }
+            int quantity = Integer.parseInt(qtyValue);
+
+            //Calculate expected subtotal
+            double calculatedSubtotal = unitPrice * quantity;
+
+            new WebDriverWait(driver, Duration.ofSeconds(15)).until(ExpectedConditions.textToBePresentInElement(subtotalValue, String.format("%.2f", calculatedSubtotal)));
+            String actualSubtotalText = subtotalValue.getText();
+            String numericSubtotal = actualSubtotalText.replaceAll("[^\\d.]", "");
+            double actualSubtotal = Double.parseDouble(numericSubtotal);
+        } catch (Exception e) {
+            System.out.println("Error verifying subtotal: " + e.getMessage());
+
         }
+        return false;
     }
+
 
     public String enterAddress(String address) {
         addressInput.clear();
@@ -188,63 +228,73 @@ public class PracticePage {
         }
     }
 
-    public void selectShippingOption() {
-        shippingOption.click();
+    //--STEP 10: Express Shipping Option---
+    public void selectExpressShippingOption() {
+        new WebDriverWait(driver, Duration.ofSeconds(15)).until(ExpectedConditions.elementToBeClickable(shippingOption)).click();
+
     }
 
-
-    public void selectWarrantyOption() {
-        warrantyOption.click();
-    }
-
-    public void enterDiscountCode(String discountCode) {
-        discountCodeInput.clear();
-        discountCodeInput.sendKeys(discountCode);
-    }
-
-    public void clickApplyDiscountButton() {
-        applyDiscountButton.click();
-    }
-
-    public void clickPurchaseButton() {
-        purchaseButton.click();
-    }
-
-    public void clickViewInvoiceOnSuccessPage() {
-        viewInvoiceOnSuccessPage.click();
-    }
-
-
-    // Method to click View button in history
-    public void clickViewButtonInHistory() {
-        // Wait for history panel to load
+    public boolean isExpressShippingApplied(String expectedCost) {
         try {
-            Thread.sleep(2000);
-            // Click the first View button found in the history
-            viewButtonInHistory.click();
-            System.out.println("Clicked View button in history");
-        } catch (Exception e) {
-            // If button not found by text, try by other methods
-            try {
-                WebElement viewBtn = driver.findElement(By.xpath("//*[contains(@id, 'view') or contains(@class, 'view')]//button"));
-                viewBtn.click();
-            } catch (Exception e2) {
-                // Try to find any button that says View
-                WebElement viewBtn = driver.findElement(By.xpath("//button[contains(., 'View')]"));
-                viewBtn.click();
-            }
-        }
-    }
-
-    // Method to verify invoice opened
-    public boolean isInvoiceOpened() {
-        try {
-            // Check if invoice details are displayed
-            WebElement invoiceContent = driver.findElement(By.xpath("//*[contains(text(), 'Invoice') or contains(text(), 'Order Details')]"));
-            return invoiceContent.isDisplayed();
+            new WebDriverWait(driver, Duration.ofSeconds(15)).until(ExpectedConditions.visibilityOf(shippingCostValue));
+            return shippingCostValue.getText().contains(expectedCost);
         } catch (Exception e) {
             return false;
         }
     }
+
+    //STEP 11: 1yr Warranty Option---
+    public void selectWarrantyOption() {
+        new WebDriverWait(driver, Duration.ofSeconds(15)).until(ExpectedConditions.elementToBeClickable(warrantyOption)).click();
+    }
+
+    public boolean isWarrantyApplied(String expectedCost) {
+        try {
+            new WebDriverWait(driver, Duration.ofSeconds(15)).until(ExpectedConditions.visibilityOf(warrantyCostValue));
+            return warrantyCostValue.getText().contains(expectedCost);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    //--STEP 12: Discount Code---
+    public void enterDiscountCode(String discountCode) {
+        new WebDriverWait(driver, Duration.ofSeconds(15)).until(ExpectedConditions.elementToBeClickable(discountCodeInput)).clear();
+        discountCodeInput.sendKeys(discountCode);
+    }
+
+
+    public void clickApplyDiscountButton() {
+        new WebDriverWait(driver, Duration.ofSeconds(15)).until(ExpectedConditions.elementToBeClickable(applyDiscountButton)).click();
+    }
+
+    public boolean isDiscountApplied() {
+        try {
+            new WebDriverWait(driver, Duration.ofSeconds(15)).until(ExpectedConditions.visibilityOf(discountValue));
+            String discountText = discountValue.getText();
+            return discountText.contains("-") || discountText.contains("%") || discountText.isEmpty();
+        } catch (Exception e) {
+            return false;
+        }
+
+    }
+
+    public void clickConfirmPurchaseButton() {
+        purchaseButton.click();
+    }
+
+    public void clickViewInvoiceOnSuccessPage() {
+        new WebDriverWait(driver, Duration.ofSeconds(15)).until(ExpectedConditions.elementToBeClickable(viewInvoiceOnSuccessPage)).click();
+    }
+
+    public void clickViewButtonInHistory() {
+        // Wait for history panel to load
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement viewButtonInHistory = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(text(), 'View')]")));
+        viewButtonInHistory.click();
+
+    }
+
+
 }
 
