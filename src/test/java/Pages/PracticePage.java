@@ -82,15 +82,11 @@ public class PracticePage {
     @FindBy(id = "view-history-btn")
     WebElement viewInvoiceOnSuccessPage;
 
-    @FindBy(xpath = "//button[contains(text(), 'View')]")
-    WebElement viewButtonInHistory;
-
-
     public PracticePage(WebDriver driver) {
         this.driver = driver;
     }
 
-
+    //---STEP 1: Select Device Type---
     public void clickWebAutomationAdvance() {
         webAutomationAdvance.click();
     }
@@ -101,6 +97,7 @@ public class PracticePage {
         }
     }
 
+    //---STEP 2: Select Device Type---
     public void selectDeviceType(String deviceType) {
         Select deviceTypeSelect = new Select(deviceTypeDropdown);
         deviceTypeSelect.selectByVisibleText(deviceType);
@@ -111,7 +108,7 @@ public class PracticePage {
             throw new AssertionError("Brand dropdown is not enabled");
         }
     }
-
+    //---STEP 3: Select Device Brand---
     public void selectDeviceBrand(String brand) {
         brandDropdown.sendKeys(brand);
     }
@@ -122,11 +119,12 @@ public class PracticePage {
         }
     }
 
+    //---STEP 4: Select Device Storage---
     public void selectStorageOption() {
         storageOption.click();
     }
 
-    //---STEP 7: Unit Price ---
+
     public String getUnitPriceText() {
         new WebDriverWait(driver,Duration.ofSeconds(15)).until(ExpectedConditions.visibilityOf(unitPriceLabel));
         return unitPriceLabel.getText();
@@ -149,6 +147,7 @@ public class PracticePage {
         return Double.parseDouble(numericPrice);
     }
 
+    //---STEP 5: Select Color ---
     public void selectColor(String color) {
         colorDropdown.sendKeys(color);
         Select colorSelect = new Select(colorDropdown);
@@ -171,9 +170,11 @@ public class PracticePage {
     }
 
     public boolean isColorSelected(String expectedColor) {
+
         return getSelectedColor().equals(expectedColor);
     }
 
+    //---STEP 6: Unit Price ---
     public void enterQuantity(String quantity) {
         new WebDriverWait(driver, Duration.ofSeconds(15)).until(ExpectedConditions.visibilityOf(quantityInput));
         new WebDriverWait(driver, Duration.ofSeconds(15)).until(ExpectedConditions.elementToBeClickable(quantityInput));
@@ -182,7 +183,7 @@ public class PracticePage {
         quantityInput.sendKeys(quantity);
     }
 
-    //STEP 8: Verify Subtotal---
+
     public boolean verifySubtotal(double expectedSubtotal) {
         try {
             //Get the unit price
@@ -209,14 +210,14 @@ public class PracticePage {
         return false;
     }
 
-
+    //STEP 7: Enter Address---
     public String enterAddress(String address) {
         addressInput.clear();
         addressInput.sendKeys(address);
 
         return addressInput.getAttribute("value");
     }
-
+    //--STEP 8: Click Next Button---
     public void clickNextButton() {
         nextButton.click();
     }
@@ -228,7 +229,7 @@ public class PracticePage {
         }
     }
 
-    //--STEP 10: Express Shipping Option---
+    //--STEP 9: Express Shipping Option---
     public void selectExpressShippingOption() {
         new WebDriverWait(driver, Duration.ofSeconds(15)).until(ExpectedConditions.elementToBeClickable(shippingOption)).click();
 
@@ -243,7 +244,7 @@ public class PracticePage {
         }
     }
 
-    //STEP 11: 1yr Warranty Option---
+    //STEP 10: 1yr Warranty Option---
     public void selectWarrantyOption() {
         new WebDriverWait(driver, Duration.ofSeconds(15)).until(ExpectedConditions.elementToBeClickable(warrantyOption)).click();
     }
@@ -257,7 +258,7 @@ public class PracticePage {
         }
     }
 
-    //--STEP 12: Discount Code---
+    //--STEP 11: Select Discount Code---
     public void enterDiscountCode(String discountCode) {
         new WebDriverWait(driver, Duration.ofSeconds(15)).until(ExpectedConditions.elementToBeClickable(discountCodeInput)).clear();
         discountCodeInput.sendKeys(discountCode);
@@ -278,15 +279,17 @@ public class PracticePage {
         }
 
     }
-
+    //---STEP 12: Click Confirm Purchase Button---
     public void clickConfirmPurchaseButton() {
         purchaseButton.click();
     }
 
+    //---STEP 13: Click View Invoice on Success Page---
     public void clickViewInvoiceOnSuccessPage() {
         new WebDriverWait(driver, Duration.ofSeconds(15)).until(ExpectedConditions.elementToBeClickable(viewInvoiceOnSuccessPage)).click();
     }
 
+    //---STEP 14: Click View Button in History Panel---
     public void clickViewButtonInHistory() {
         // Wait for history panel to load
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
